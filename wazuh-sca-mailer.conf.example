@@ -1,0 +1,26 @@
+{
+        "wazuh": {
+                "url": "http://localhost:55000",
+                "user": "wazuh",
+                "pw": "wazuhpw"
+        },
+        "smtp": {
+                "host": "localhost",
+                "port": 25
+        },
+        "targets": [
+                {
+                        "sca": {
+                                "policy_ids": ["mypolicy"],
+                                "hostfilter": "myhostregex"
+                        },
+                        "mail": {
+                                "from": "SCA mailer <scamailer@example.com>",
+                                "to": [
+                                        "recipient1@example.com"
+                                ],
+                                "subject": "Wazuh SCA report"
+                        }
+                }
+        ]
+}
