@@ -88,18 +88,19 @@ def get_agent_sca_summary(url: str, token: str, agent_id: int, policy_ids, logpa
         if resp.status_code != 200:
             log_msg("Failed to get system config check summaries from " + sumurl + ". Status code: " + str(resp.status_code),
                     logpath, "ERROR", silent)
-            sys.exit(1)
 
-        for j in json.loads(resp.text)["data"]["affected_items"]:
-            sca_summaries.append(
-                {
-                    "policy_id": i,
-                    "pass": j["pass"],
-                    "fail": j["fail"],
-                    "score": j["score"]
-                }
-            )
-
+        respobj = json.loads(resp.text)
+        if "data" in respobj:
+            for j in json.loads(resp.text)["data"]["affected_items"]:
+                sca_summaries.append(
+                    {
+                        "policy_id": i,
+                        "pass": j["pass"],
+                        "fail": j["fail"],
+                        "score": j["score"]
+                    }
+                )
+    
     return sca_summaries
 
 def get_agent_scas(url: str, token: str, agent_id: int, policy_ids, logpath: str, silent: bool):
@@ -110,17 +111,18 @@ def get_agent_scas(url: str, token: str, agent_id: int, policy_ids, logpath: str
         if resp.status_code != 200:
             log_msg("Failed to get system config checks from " + scaurl + ". Status code: " + str(resp.status_code),
                     logpath, "ERROR", silent)
-            sys.exit(1)
 
-        for j in json.loads(resp.text)["data"]["affected_items"]:
-            scas.append(
-                {
-                    "title": j["title"],
-                    "result": j["result"],
-                    "remediation": j["remediation"] if "remediation" in j else "unknown"
-                }
-            )
-
+        respobj = json.loads(resp.text)
+        if "data" in respobj:
+            for j in respobj["data"]["affected_items"]:
+                scas.append(
+                    {
+                        "title": j["title"],
+                        "result": j["result"],
+                        "remediation": j["remediation"] if "remediation" in j else "unknown"
+                    }
+                )
+    
     return scas
 
 def render_csv(scas):
